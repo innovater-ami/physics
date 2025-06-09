@@ -83,6 +83,49 @@
       padding: 20px;
       margin-top: 40px;
     }
+    .calculator-container {
+      max-width: 700px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #1e3a8a;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3b5db3;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
   </style>
 </head>
 <body>
@@ -170,6 +213,78 @@
   <footer>
     &copy; 2025 Modern Physics Resource Hub
   </footer>
+<div class="calculator-container">
+    <h2>Modern Physics Calculator</h2>
+    <label for="formula">Choose Calculation:</label>
+    <select id="formula" onchange="displayFields()">
+      <option value="">-- Select --</option>
+      <option value="photoelectric">Photoelectric Effect: E = hf - ϕ</option>
+      <option value="massenergy">Mass-Energy Equivalence: E = mc²</option>
+      <option value="debroglie">De Broglie Wavelength: λ = h/p</option>
+    </select>
 
+    <div id="inputFields"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function displayFields() {
+      const formula = document.getElementById("formula").value;
+      const container = document.getElementById("inputFields");
+      let html = "";
+
+      switch (formula) {
+        case "photoelectric":
+          html = `
+            <label>Planck's Constant h (J·s):</label><input id="h" type="number" value="6.626e-34" />
+            <label>Frequency f (Hz):</label><input id="f" type="number" />
+            <label>Work Function ϕ (J):</label><input id="phi" type="number" />
+            <button onclick="calcPhotoelectric()">Calculate E</button>
+          `;
+          break;
+        case "massenergy":
+          html = `
+            <label>Mass m (kg):</label><input id="mass" type="number" />
+            <label>Speed of Light c (m/s):</label><input id="c" type="number" value="3.0e8" />
+            <button onclick="calcMassEnergy()">Calculate E</button>
+          `;
+          break;
+        case "debroglie":
+          html = `
+            <label>Planck's Constant h (J·s):</label><input id="h2" type="number" value="6.626e-34" />
+            <label>Momentum p (kg·m/s):</label><input id="p" type="number" />
+            <button onclick="calcDeBroglie()">Calculate λ</button>
+          `;
+          break;
+        default:
+          html = "";
+      }
+
+      container.innerHTML = html;
+      document.getElementById("result").innerText = "";
+    }
+
+    function calcPhotoelectric() {
+      const h = parseFloat(document.getElementById("h").value);
+      const f = parseFloat(document.getElementById("f").value);
+      const phi = parseFloat(document.getElementById("phi").value);
+      const E = h * f - phi;
+      document.getElementById("result").innerText = `Kinetic Energy E: ${E.toExponential(4)} J`;
+    }
+
+    function calcMassEnergy() {
+      const m = parseFloat(document.getElementById("mass").value);
+      const c = parseFloat(document.getElementById("c").value);
+      const E = m * c * c;
+      document.getElementById("result").innerText = `Energy E: ${E.toExponential(4)} J`;
+    }
+
+    function calcDeBroglie() {
+      const h = parseFloat(document.getElementById("h2").value);
+      const p = parseFloat(document.getElementById("p").value);
+      const lambda = h / p;
+      document.getElementById("result").innerText = `Wavelength λ: ${lambda.toExponential(4)} m`;
+    }
+  </script>
 </body>
 </html>
