@@ -91,6 +91,41 @@
             border-radius: 10px;
             font-size: 0.9em;
         }
+        .calculator-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #00796b;
+    }
+    label, select, input, button {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+    }
+    input, select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #00796b;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
     </style>
 </head>
 <body>
@@ -166,19 +201,81 @@
 <section>
     <h2 style="text-align:center;">Example Questions</h2>
     <div class="examples">
-        <h3>1. A 5 kg object is acted on by a force of 20 N. What is the acceleration?</h3>
+        <h3>1. A force of 20 N acts on a 5 kg object. What is the acceleration?</h3>
         <p><strong>Solution:</strong> F = ma ⇒ a = F/m = 20/5 = 4 m/s²</p>
 
-        <h3>2. A block of mass 2 kg slides on a frictionless surface with acceleration 3 m/s². What is the net force?</h3>
+        <h3>2. A block of mass 2 kg slides on a frictionless surface with an acceleration of 3 m/s². What is the net force?</h3>
         <p><strong>Solution:</strong> F = ma = 2 × 3 = 6 N</p>
 
         <h3>3. A book is kept on a table. Identify action-reaction forces.</h3>
-        <p><strong>Solution:</strong> Book applies force (weight) on table. Table applies equal and opposite normal reaction upward.</p>
+        <p><strong>Solution:</strong> Book applies force (weight) on table. The table applies equal and opposite normal reaction upward.</p>
 
         <h3>4. Calculate frictional force for μ = 0.2 and normal force 50 N.</h3>
         <p><strong>Solution:</strong> f = μN = 0.2 × 50 = 10 N</p>
     </div>
 </section>
+ <div class="calculator-container">
+    <h2>LAWS OF MOTION</h2>
+    <label for="law-formula">Choose a Formula:</label>
+    <select id="law-formula" onchange="loadLawFields()">
+      <option value="">--Select--</option>
+      <option value="fma">Newton's Second Law: F = ma</option>
+      <option value="momentum">Momentum: p = mv</option>
+      <option value="impulse">Impulse: J = F·t</option>
+    </select>
+    <div id="lawFields"></div>
+    <div id="result"></div>
+  </div>
 
+  <script>
+    function loadLawFields() {
+      const value = document.getElementById("law-formula").value;
+      const div = document.getElementById("lawFields");
+      let html = "";
+
+      if (value === "fma") {
+        html = `
+          <label>Mass (kg):</label><input id="mass" type="number">
+          <label>Acceleration (m/s²):</label><input id="acc" type="number">
+          <button onclick="calcForce()">Calculate Force</button>
+        `;
+      } else if (value === "momentum") {
+        html = `
+          <label>Mass (kg):</label><input id="mass2" type="number">
+          <label>Velocity (m/s):</label><input id="vel" type="number">
+          <button onclick="calcMomentum()">Calculate Momentum</button>
+        `;
+      } else if (value === "impulse") {
+        html = `
+          <label>Force (N):</label><input id="force" type="number">
+          <label>Time (s):</label><input id="time" type="number">
+          <button onclick="calcImpulse()">Calculate Impulse</button>
+        `;
+      }
+      div.innerHTML = html;
+      document.getElementById("result").innerHTML = "";
+    }
+
+    function calcForce() {
+      const m = parseFloat(document.getElementById("mass").value);
+      const a = parseFloat(document.getElementById("acc").value);
+      const f = m * a;
+      document.getElementById("result").innerText = `Force: ${f.toFixed(2)} N`;
+    }
+
+    function calcMomentum() {
+      const m = parseFloat(document.getElementById("mass2").value);
+      const v = parseFloat(document.getElementById("vel").value);
+      const p = m * v;
+      document.getElementById("result").innerText = `Momentum: ${p.toFixed(2)} kg·m/s`;
+    }
+
+    function calcImpulse() {
+      const f = parseFloat(document.getElementById("force").value);
+      const t = parseFloat(document.getElementById("time").value);
+      const j = f * t;
+      document.getElementById("result").innerText = `Impulse: ${j.toFixed(2)} Ns`;
+    }
+  </script>
 </body>
 </html>
