@@ -100,6 +100,55 @@
       border-radius: 15px;
       margin-top: 20px;
     }
+     .calculator-container {
+      margin: 20px auto;
+      max-width: 700px;
+      background: rgba(189, 207, 219, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 12px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 10px 20px;
+      background-color: #1e3a8a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3b5db3;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
   </style>
 </head>
 <body>
@@ -189,6 +238,104 @@
       <h3>4. If g at surface is 9.8 m/s², find g at height R (i.e., h = R)</h3>
       <p><strong>Solution:</strong> g' = g/(2)² = 9.8 / 4 = 2.45 m/s²</p>
     </div>
-  </section>
+     </section>
+  <div class="calculator-container">
+    <h2>GRAVITATION</h2>
+    <label for="formula">Choose Calculation:</label>
+    <select id="formula" onchange="displayFields()">
+      <option value="">-- Select --</option>
+      <option value="gravity_force">Gravitational Force: F = G·m1·m2 / r²</option>
+      <option value="gravity_mass1">Find m1</option>
+      <option value="gravity_mass2">Find m2</option>
+      <option value="gravity_radius">Find r</option>
+    </select>
+
+    <div id="inputFields"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function displayFields() {
+      const formula = document.getElementById("formula").value;
+      const container = document.getElementById("inputFields");
+      let html = "";
+
+      switch(formula) {
+        case "gravity_force":
+          html = `
+            <label>Mass m₁ (kg):</label><input id="m1" type="number" />
+            <label>Mass m₂ (kg):</label><input id="m2" type="number" />
+            <label>Distance r (m):</label><input id="r" type="number" />
+            <button onclick="calcGravitationalForce()">Calculate F</button>
+          `;
+          break;
+        case "gravity_mass1":
+          html = `
+            <label>Force F (N):</label><input id="F1" type="number" />
+            <label>Mass m₂ (kg):</label><input id="m2_1" type="number" />
+            <label>Distance r (m):</label><input id="r1" type="number" />
+            <button onclick="calcMass1()">Calculate m₁</button>
+          `;
+          break;
+        case "gravity_mass2":
+          html = `
+            <label>Force F (N):</label><input id="F2" type="number" />
+            <label>Mass m₁ (kg):</label><input id="m1_1" type="number" />
+            <label>Distance r (m):</label><input id="r2" type="number" />
+            <button onclick="calcMass2()">Calculate m₂</button>
+          `;
+          break;
+        case "gravity_radius":
+          html = `
+            <label>Force F (N):</label><input id="F3" type="number" />
+            <label>Mass m₁ (kg):</label><input id="m1_2" type="number" />
+            <label>Mass m₂ (kg):</label><input id="m2_2" type="number" />
+            <button onclick="calcRadius()">Calculate r</button>
+          `;
+          break;
+        default:
+          html = "";
+      }
+
+      container.innerHTML = html;
+      document.getElementById("result").innerHTML = "";
+    }
+
+    function calcGravitationalForce() {
+      const m1 = parseFloat(document.getElementById("m1").value);
+      const m2 = parseFloat(document.getElementById("m2").value);
+      const r = parseFloat(document.getElementById("r").value);
+      const G = 6.67430e-11;
+      const F = G * (m1 * m2) / (r * r);
+      document.getElementById("result").innerText = `Force: ${F.toExponential(4)} N`;
+    }
+
+    function calcMass1() {
+      const F = parseFloat(document.getElementById("F1").value);
+      const m2 = parseFloat(document.getElementById("m2_1").value);
+      const r = parseFloat(document.getElementById("r1").value);
+      const G = 6.67430e-11;
+      const m1 = (F * r * r) / (G * m2);
+      document.getElementById("result").innerText = `m₁: ${m1.toExponential(4)} kg`;
+    }
+
+    function calcMass2() {
+      const F = parseFloat(document.getElementById("F2").value);
+      const m1 = parseFloat(document.getElementById("m1_1").value);
+      const r = parseFloat(document.getElementById("r2").value);
+      const G = 6.67430e-11;
+      const m2 = (F * r * r) / (G * m1);
+      document.getElementById("result").innerText = `m₂: ${m2.toExponential(4)} kg`;
+    }
+
+    function calcRadius() {
+      const F = parseFloat(document.getElementById("F3").value);
+      const m1 = parseFloat(document.getElementById("m1_2").value);
+      const m2 = parseFloat(document.getElementById("m2_2").value);
+      const G = 6.67430e-11;
+      const r = Math.sqrt((G * m1 * m2) / F);
+      document.getElementById("result").innerText = `r: ${r.toFixed(4)} m`;
+    }
+  </script>
 </body>
 </html>
