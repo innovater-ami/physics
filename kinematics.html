@@ -122,6 +122,54 @@
             padding: 10px;
             border-radius: 5px;
         }
+        .calculator-container {
+      max-width: 700px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 12px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 10px 20px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3498db;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #27ae60;
+    }
     </style>
 </head>
 <body>
@@ -263,6 +311,117 @@
         <p><strong>Solution:</strong> u = 0, v = 40, t = 20 ⇒ s = ut + ½at² = 0 + ½ × 2 × 400 = 400 m</p>
     </div>
 </section>
+    <div class="calculator-container">
+    <h2>KINEMATICS</h2>
+    <label for="formula">Choose Calculation:</label>
+    <select id="formula" onchange="displayFields()">
+      <option value="">-- Select --</option>
+      <option value="final_velocity">Final velocity: v = u + at</option>
+      <option value="displacement">Displacement: s = ut + 0.5at²</option>
+      <option value="acceleration">Acceleration: a = (v - u)/t</option>
+      <option value="initial_velocity">Initial velocity: u = v - at</option>
+      <option value="time">Time: t = (v - u)/a</option>
+    </select>
+
+    <div id="inputFields"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function displayFields() {
+      const formula = document.getElementById("formula").value;
+      const container = document.getElementById("inputFields");
+      let html = "";
+
+      switch (formula) {
+        case "final_velocity":
+          html = `
+            <label>Initial velocity (u) in m/s:</label><input id="u" type="number">
+            <label>Acceleration (a) in m/s²:</label><input id="a" type="number">
+            <label>Time (t) in seconds:</label><input id="t" type="number">
+            <button onclick="calcFinalVelocity()">Calculate v</button>
+          `;
+          break;
+        case "displacement":
+          html = `
+            <label>Initial velocity (u) in m/s:</label><input id="u" type="number">
+            <label>Time (t) in seconds:</label><input id="t" type="number">
+            <label>Acceleration (a) in m/s²:</label><input id="a" type="number">
+            <button onclick="calcDisplacement()">Calculate s</button>
+          `;
+          break;
+        case "acceleration":
+          html = `
+            <label>Final velocity (v) in m/s:</label><input id="v" type="number">
+            <label>Initial velocity (u) in m/s:</label><input id="u" type="number">
+            <label>Time (t) in seconds:</label><input id="t" type="number">
+            <button onclick="calcAcceleration()">Calculate a</button>
+          `;
+          break;
+        case "initial_velocity":
+          html = `
+            <label>Final velocity (v) in m/s:</label><input id="v" type="number">
+            <label>Acceleration (a) in m/s²:</label><input id="a" type="number">
+            <label>Time (t) in seconds:</label><input id="t" type="number">
+            <button onclick="calcInitialVelocity()">Calculate u</button>
+          `;
+          break;
+        case "time":
+          html = `
+            <label>Final velocity (v) in m/s:</label><input id="v" type="number">
+            <label>Initial velocity (u) in m/s:</label><input id="u" type="number">
+            <label>Acceleration (a) in m/s²:</label><input id="a" type="number">
+            <button onclick="calcTime()">Calculate t</button>
+          `;
+          break;
+        default:
+          html = "";
+      }
+
+      container.innerHTML = html;
+      document.getElementById("result").innerText = "";
+    }
+
+    function calcFinalVelocity() {
+      const u = parseFloat(document.getElementById("u").value);
+      const a = parseFloat(document.getElementById("a").value);
+      const t = parseFloat(document.getElementById("t").value);
+      const v = u + a * t;
+      document.getElementById("result").innerText = `v = ${v.toFixed(2)} m/s`;
+    }
+
+    function calcDisplacement() {
+      const u = parseFloat(document.getElementById("u").value);
+      const t = parseFloat(document.getElementById("t").value);
+      const a = parseFloat(document.getElementById("a").value);
+      const s = u * t + 0.5 * a * t * t;
+      document.getElementById("result").innerText = `s = ${s.toFixed(2)} m`;
+    }
+
+    function calcAcceleration() {
+      const v = parseFloat(document.getElementById("v").value);
+      const u = parseFloat(document.getElementById("u").value);
+      const t = parseFloat(document.getElementById("t").value);
+      const a = (v - u) / t;
+      document.getElementById("result").innerText = `a = ${a.toFixed(2)} m/s²`;
+    }
+
+    function calcInitialVelocity() {
+      const v = parseFloat(document.getElementById("v").value);
+      const a = parseFloat(document.getElementById("a").value);
+      const t = parseFloat(document.getElementById("t").value);
+      const u = v - a * t;
+      document.getElementById("result").innerText = `u = ${u.toFixed(2)} m/s`;
+    }
+
+    function calcTime() {
+      const v = parseFloat(document.getElementById("v").value);
+      const u = parseFloat(document.getElementById("u").value);
+      const a = parseFloat(document.getElementById("a").value);
+      const t = (v-u) / a;
+      document.getElementById("result").innerText = `t = ${t.toFixed(2)} s`;
+    }
+  </script>
 
 </body>
 </html>
